@@ -1,0 +1,16 @@
+# SPDX-License-Identifier: MIT
+
+# Copyright (C) 2020 Malinovsky Rodion (rodionmalino@gmail.com)
+
+[credentials]
+server = "SERVER_URL"
+username = "LOGIN"
+password = "PASSWORD"
+
+[options]
+# Work hours in the week
+basehours = 40
+# Week number
+weeks = 30
+# List of users
+users = ["User1", "User2"]
