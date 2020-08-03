@@ -18,3 +18,4 @@ toml = "0.5"
 tokio = { version = "0.2", features = ["full"] }
 reqwest = { version = "0.10", features = ["json"] }
 futures = "0.3"
+xlsxwriter = "0.3.1"

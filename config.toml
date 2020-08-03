@@ -8,8 +8,6 @@ username = "LOGIN"
 password = "PASSWORD"
 
 [options]
-# Work hours in the week
-basehours = 40
 # Week number
 weeks = 30
 # List of users

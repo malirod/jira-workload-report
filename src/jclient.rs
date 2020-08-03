@@ -15,6 +15,8 @@ use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
 pub struct UserTimersheet {
+    #[serde(skip_deserializing)]
+    pub user_name: String,
     pub worklog: Vec<Worklog>,
 }
 
@@ -41,6 +43,7 @@ async fn get_timesheet(
     start: &NaiveDate,
     end: &NaiveDate,
 ) -> Result<UserTimersheet> {
+    log::info!("Query worklog for {}", user_name);
     let issues_response = client
         .get(&format!(
             "{}/rest/timesheet-gadget/1.0/raw-timesheet.json?targetUser={}&startDate={}&endDate={}",
@@ -52,7 +55,9 @@ async fn get_timesheet(
         .basic_auth(&credentials.username, Some(&credentials.password))
         .send()
         .await?;
-    let user_timesheet: UserTimersheet = issues_response.json().await?;
+    log::info!("Got worklog for {}", user_name);
+    let mut user_timesheet: UserTimersheet = issues_response.json().await?;
+    user_timesheet.user_name = user_name.to_owned();
     Ok(user_timesheet)
 }
 

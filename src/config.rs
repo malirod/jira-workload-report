@@ -20,7 +20,6 @@ pub struct Credentials {
 
 #[derive(Deserialize, Debug)]
 pub struct Options {
-    pub basehours: u8,
     pub weeks: u32,
     pub users: Vec<String>,
 }
