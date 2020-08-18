@@ -106,36 +106,53 @@ fn save_report_to_excel(timesheets: &[jclient::UserTimersheet]) -> Result<()> {
         }
         let last_data_row_index = row_index;
         sheet.write_string(row_index, COLUMNT_INDEX_KEY, "Total", None)?;
-        sheet.write_formula(
-            row_index,
-            COLUMNT_INDEX_SPENT,
-            &format!("=SUM(E2:E{})", row_index),
-            None,
-        )?;
+        let has_worklog_items = !user_timesheet.worklog.is_empty();
+        if has_worklog_items {
+            sheet.write_formula(
+                row_index,
+                COLUMNT_INDEX_SPENT,
+                &format!("=SUM(E2:E{})", row_index),
+                None,
+            )?;
+        } else {
+            sheet.write_number(row_index, COLUMNT_INDEX_SPENT, 0.0, None)?;
+        }
         row_index += 1;
         sheet.write_string(row_index, COLUMNT_INDEX_KEY, HEADER_PROJECT, None)?;
-        sheet.write_formula(
-            row_index + 1,
-            COLUMNT_INDEX_KEY,
-            &format!("=SUM(G2:G{})", last_data_row_index),
-            None,
-        )?;
+        if has_worklog_items {
+            sheet.write_formula(
+                row_index + 1,
+                COLUMNT_INDEX_KEY,
+                &format!("=SUM(G2:G{})", last_data_row_index),
+                None,
+            )?;
+        } else {
+            sheet.write_number(row_index + 1, COLUMNT_INDEX_KEY, 0.0, None)?;
+        }
 
         sheet.write_string(row_index, COLUMNT_INDEX_KEY + 1, HEADER_COMMON, None)?;
-        sheet.write_formula(
-            row_index + 1,
-            COLUMNT_INDEX_KEY + 1,
-            &format!("=SUM(H2:H{})", last_data_row_index),
-            None,
-        )?;
+        if has_worklog_items {
+            sheet.write_formula(
+                row_index + 1,
+                COLUMNT_INDEX_KEY + 1,
+                &format!("=SUM(H2:H{})", last_data_row_index),
+                None,
+            )?;
+        } else {
+            sheet.write_number(row_index + 1, COLUMNT_INDEX_KEY + 1, 0.0, None)?;
+        }
 
         sheet.write_string(row_index, COLUMNT_INDEX_KEY + 2, HEADER_ARCH, None)?;
-        sheet.write_formula(
-            row_index + 1,
-            COLUMNT_INDEX_KEY + 2,
-            &format!("=SUM(I2:I{})", last_data_row_index),
-            None,
-        )?;
+        if has_worklog_items {
+            sheet.write_formula(
+                row_index + 1,
+                COLUMNT_INDEX_KEY + 2,
+                &format!("=SUM(I2:I{})", last_data_row_index),
+                None,
+            )?;
+        } else {
+            sheet.write_number(row_index + 1, COLUMNT_INDEX_KEY + 2, 0.0, None)?;
+        }
     }
     log::info!("Saving report");
     Ok(workbook.close()?)
